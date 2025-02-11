@@ -163,9 +163,10 @@
     </div>
 
     <script>
+        const URL = "http://localhost:8000"
         async function loadExercises() {
             try {
-                const response = await fetch("http://localhost:8000/exercises.json");
+                const response = await fetch(`${URL}/exercises.json`);
                 const data = await response.json();
                 renderChapters(data);
             } catch (error) {
@@ -215,7 +216,7 @@
                         <p class="question-text">${question.question}</p>
                         <img class="question-image" src="${question.image}" alt="圖片">
                     </div>
-                    <button class="mt-2 px-4 py-2 bg-accent text-white rounded-lg transition hover:bg-primary" onclick="revealAnswer(${question.id})">顯示答案</button>
+                    <button class="mt-2 px-4 py-2 bg-accent text-white rounded-lg transition hover:bg-primary" onclick="revealAnswer('${currentUnit.name}',${question.id})">顯示答案</button>
                     <p class="hidden mt-2 p-2 bg-secondary rounded-md text-primary" id="answer-${question.id}">${question.answer}</p>
         
                     <!-- 顯示評價 -->
@@ -236,7 +237,7 @@
                 modalQuestions.appendChild(questionDiv);
         
                 // 請求該題目的評價
-                const response = await fetch("http://localhost:8000/ratings");
+                const response = await fetch(`${URL}/ratings`);
                 const ratingsData = await response.json();
         
                 // 顯示該題目的評價
@@ -259,16 +260,47 @@
             modal.classList.remove("active");
         }
 
-        function revealAnswer(exerciseId) {
+        function revealAnswer(unitName, exerciseId) {
             const answerElement = document.getElementById(`answer-${exerciseId}`);
             answerElement.classList.toggle("hidden");
+        
+            // 取得使用者的 User-Agent
+            const userAgent = navigator.userAgent;
+        
+            // 發送 POST 請求到伺服器
+            fetch(`${URL}/track_click`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"  
+                },
+                body: JSON.stringify({ 
+                    unitName: unitName,
+                    exerciseId: exerciseId,
+                    timestamp: new Date().toISOString(),
+                    info: navigator.userAgent    
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("點擊紀錄儲存成功:", data);
+            })
+            .catch(error => {
+                console.error("儲存點擊紀錄時發生錯誤:", error);
+            });
+            
         }
+        
 
         function rateQuestion(questionId, rating) {
             console.log(`題目 ${questionId} 的評價為：${rating}`);
             
             // 這裡進行評價操作並顯示回應
-            fetch("http://localhost:8000/rate_question", {
+            fetch(`${URL}/rate_question`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -295,7 +327,7 @@
                 console.error("評價失敗:", error);
             });
         }
-        
+            
 
         loadExercises();
     </script>
