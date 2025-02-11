@@ -1,0 +1,145 @@
+{
+  "latest": [
+    { "unit": "牛頓第一定律", "topic": "靜力學基礎" },
+    { "unit": "熱力學第一定律", "topic": "能量轉換" },
+    { "unit": "動量公式", "topic": "運動學與動量" },
+    { "unit": "電磁學基本定律", "topic": "靜電力學與磁場" }
+  ],
+  "chapters": [
+    {
+      "name": "力學",
+      "units": [
+        {
+          "name": "牛頓第一定律",
+          "image": "./assets/1234.png",
+          "questions": [
+            {
+              "id": 1,
+              "question": "什麼是牛頓的第一定律？",
+              "answer": "牛頓的第一定律，物體若不受外力作用，將保持靜止或等速直線運動狀態。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            },
+            {
+              "id": 2,
+              "question": "牛頓第一定律的實際應用是什麼？",
+              "answer": "在太空中，無外力作用下，物體將保持靜止或等速運動。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            }
+          ]
+        },
+        {
+          "name": "動量公式",
+          "image": "./assets/1234.png",
+          "questions": [
+            {
+              "id": 3,
+              "question": "動量公式是什麼？",
+              "answer": "動量等於物體的質量乘以速度。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            },
+            {
+              "id": 4,
+              "question": "動量守恆定律是什麼？",
+              "answer": "在一個封閉系統中，總動量是守恆的，即不受外力影響。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "熱力學",
+      "units": [
+        {
+          "name": "熱力學第一定律",
+          "image": "./assets/1234.png",
+          "questions": [
+            {
+              "id": 5,
+              "question": "熱力學第一定律是什麼？",
+              "answer": "熱力學第一定律表明能量不會創造或摧毀，只會從一種形式轉換為另一種形式。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            },
+            {
+              "id": 6,
+              "question": "如何計算熱力學系統的內能變化？",
+              "answer": "內能變化等於熱量與做功的總和。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            }
+          ]
+        },
+        {
+          "name": "熱力學第二定律",
+          "image": "./assets/1234.png",
+          "questions": [
+            {
+              "id": 7,
+              "question": "熱力學第二定律是什麼？",
+              "answer": "熱力學第二定律表明熱量總是從高溫物體流向低溫物體。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            },
+            {
+              "id": 8,
+              "question": "熵的定義是什麼？",
+              "answer": "熵是系統的無序程度，熵的增加與熱的轉移有關。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "電磁學",
+      "units": [
+        {
+          "name": "庫倫定律",
+          "image": "./assets/1234.png",
+          "questions": [
+            {
+              "id": 9,
+              "question": "庫倫定律是什麼？",
+              "answer": "庫倫定律描述兩點電荷之間的相互作用力，該力與兩電荷的積成正比，與它們之間的距離的平方成反比。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            },
+            {
+              "id": 10,
+              "question": "如何計算庫倫力？",
+              "answer": "庫倫力可以使用公式 F = k * (q1 * q2) / r^2 來計算，其中 k 是庫倫常數，q1 和 q2 是兩個電荷，r 是它們之間的距離。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            }
+          ]
+        },
+        {
+          "name": "安培定律",
+          "image": "./assets/1234.png",
+          "questions": [
+            {
+              "id": 11,
+              "question": "安培定律是什麼？",
+              "answer": "安培定律描述電流所產生的磁場，並且與電流的大小和方向有關。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            },
+            {
+              "id": 12,
+              "question": "如何計算由電流產生的磁場？",
+              "answer": "磁場可以根據安培定律使用 B = μ0 * I / (2 * π * r) 計算，其中 μ0 是磁場常數，I 是電流，r 是距離。",
+              "image": "./assets/1234.png",
+              "ratings": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
