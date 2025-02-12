@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer")
 const path = require("path");
 const fs = require("fs");
 const userAgentParser = require("user-agent-parser")
@@ -10,6 +11,7 @@ app.use(express.static("."));
 app.use(express.json());  // 加入這一行來解析 JSON 請求體
 
 let ratings = {};  // 用於儲存題目的評價
+
 
 // 讀取題目評價
 app.get("/ratings", (req, res) => {
@@ -102,6 +104,10 @@ app.get("/secretPage", (req, res) => {
     res.sendFile(path.join(__dirname, "secretPage.html"));
 });
 
+app.get("/uploadPage", (req, res) => {
+    res.sendFile(path.join(__dirname, "uploadPage.html"));
+});
+
 // 提供點擊紀錄的 JSON 資料
 app.get("/track_click_data", (req, res) => {
     const filePath = path.join(__dirname, "trackClick.json");
@@ -122,6 +128,88 @@ app.get("/track_click_data", (req, res) => {
             res.status(500).json({ message: "JSON 解析錯誤" });
         }
     });
+});
+
+
+const DATA_FILE = path.join(__dirname, "exercises.json");
+// 讀取 JSON 檔案
+const readData = () => {
+    try {
+        const data = fs.readFileSync(DATA_FILE, "utf8");
+        return JSON.parse(data);
+    } catch (error) {
+        console.error("讀取 JSON 失敗:", error);
+        return { chapters: [] };
+    }
+};
+
+// 寫入 JSON 檔案
+const writeData = (data) => {
+    try {
+        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 4), "utf8");
+    } catch (error) {
+        console.error("寫入 JSON 失敗:", error);
+    }
+};
+
+app.get("/get-data", (req,res) => {
+    const data = readData();
+    res.json(data);
+})
+
+// 🔹 新增章節
+app.post("/add-chapter", (req, res) => {
+    const { name } = req.body;
+    if (!name) return res.status(400).json({ error: "章節名稱是必填的" });
+
+    let data = readData();
+    data.chapters.push({ name, units: [] });
+
+    writeData(data);
+    res.json({ message: "章節新增成功", data });
+});
+
+// 🔹 新增單元
+app.post("/add-unit", (req, res) => {
+    const { chapterName, unitName, image } = req.body;
+    if (!chapterName || !unitName) return res.status(400).json({ error: "請提供章節名稱和單元名稱" });
+
+    let data = readData();
+    let chapter = data.chapters.find(c => c.name === chapterName);
+    if (!chapter) return res.status(404).json({ error: "找不到對應章節" });
+
+    chapter.units.push({ name: unitName, image, questions: [] });
+
+    writeData(data);
+    res.json({ message: "單元新增成功", data });
+});
+
+// 🔹 新增題目
+app.post("/add-question", (req, res) => {
+    const { chapterName, unitName, question, answer, image } = req.body;
+    if (!chapterName || !unitName || !question || !answer) {
+        return res.status(400).json({ error: "請提供完整的題目信息" });
+    }
+
+    let data = readData();
+    let chapter = data.chapters.find(c => c.name === chapterName);
+    if (!chapter) return res.status(404).json({ error: "找不到對應章節" });
+
+    let unit = chapter.units.find(u => u.name === unitName);
+    if (!unit) return res.status(404).json({ error: "找不到對應單元" });
+
+    let newQuestion = {
+        id: unit.questions.length + 1,
+        question,
+        answer,
+        image,
+        ratings: []
+    };
+
+    unit.questions.push(newQuestion);
+
+    writeData(data);
+    res.json({ message: "題目新增成功", data });
 });
 
 

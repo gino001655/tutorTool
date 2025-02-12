@@ -58,5 +58,75 @@
       "os": "Windows",
       "device": "Unknown"
     }
+  },
+  {
+    "unitName": "熱力學第二定律",
+    "exerciseId": 7,
+    "timestamp": "2025-02-12T04:48:45.893Z",
+    "parsedInfo": {
+      "browser": "Chrome",
+      "os": "Windows",
+      "device": "Unknown"
+    }
+  },
+  {
+    "unitName": "熱力學第二定律",
+    "exerciseId": 7,
+    "timestamp": "2025-02-12T04:59:49.708Z",
+    "parsedInfo": {
+      "browser": "Chrome",
+      "os": "Windows",
+      "device": "Unknown"
+    }
+  },
+  {
+    "unitName": "牛頓第一定律",
+    "exerciseId": 3,
+    "timestamp": "2025-02-12T05:26:55.875Z",
+    "parsedInfo": {
+      "browser": "Chrome",
+      "os": "Windows",
+      "device": "Unknown"
+    }
+  },
+  {
+    "unitName": "熱力學第二定律",
+    "exerciseId": 7,
+    "timestamp": "2025-02-12T05:28:50.516Z",
+    "parsedInfo": {
+      "browser": "Chrome",
+      "os": "Windows",
+      "device": "Unknown"
+    }
+  },
+  {
+    "unitName": "熱力學第二定律",
+    "exerciseId": 7,
+    "timestamp": "2025-02-12T05:28:51.604Z",
+    "parsedInfo": {
+      "browser": "Chrome",
+      "os": "Windows",
+      "device": "Unknown"
+    }
+  },
+  {
+    "unitName": "動量公式",
+    "exerciseId": 3,
+    "timestamp": "2025-02-12T05:55:45.844Z",
+    "parsedInfo": {
+      "browser": "Chrome",
+      "os": "Windows",
+      "device": "Unknown"
+    }
+  },
+  {
+    "unitName": "動量公式",
+    "exerciseId": 3,
+    "timestamp": "2025-02-12T05:55:46.738Z",
+    "parsedInfo": {
+      "browser": "Chrome",
+      "os": "Windows",
+      "device": "Unknown"
+    }
   }
 ]

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上傳頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>上傳內容</h1>
+
+    <!-- 新增章節 -->
+    <h2>新增章節</h2>
+    <form id="addChapterForm">
+        <input type="text" id="chapterName" placeholder="章節名稱" required>
+        <button type="submit">新增章節</button>
+    </form>
+
+    <!-- 新增單元 -->
+    <h2>新增單元</h2>
+    <form id="addUnitForm">
+        <select id="chapterOfUnit" required>
+            <option value="">請選擇章節</option>
+        </select>
+        <input type="text" id="unitName" placeholder="單元名稱" required>
+        <input type="file" id="unitImage">
+        <button type="submit">新增單元</button>
+    </form>
+
+    <!-- 新增題目 -->
+    <h2>新增題目</h2>
+    <form id="addQuestionForm">
+        <select id="questionChapter" required>
+            <option value="">請選擇章節</option>
+        </select>
+        <select id="questionUnit" required>
+            <option value="">請先選擇章節</option>
+        </select>
+        <input type="text" id="questionText" placeholder="題目內容" required>
+        <input type="text" id="answerText" placeholder="答案內容" required>
+        <input type="file" id="questionImage">
+        <button type="submit">新增題目</button>
+    </form>
+
+    <script>
+        const API_BASE = "http://localhost:8000"; // 伺服器 API 地址
+
+        // 🔹 載入章節並填充到下拉選單
+        async function loadChapters() {
+            try {
+                const response = await fetch(`${API_BASE}/get-data`);
+                const data = await response.json();
+
+                // 填充「新增單元」和「新增題目」的章節選單
+                const chapterSelects = document.querySelectorAll("#chapterOfUnit, #questionChapter");
+                chapterSelects.forEach(select => {
+                    select.innerHTML = `<option value="">請選擇章節</option>`;
+                    data.chapters.forEach(chapter => {
+                        const option = document.createElement("option");
+                        option.value = chapter.name;
+                        option.textContent = chapter.name;
+                        select.appendChild(option);
+                    });
+                });
+
+                // 當「新增題目」選擇章節時，自動載入對應的單元
+                document.getElementById("questionChapter").addEventListener("change", function() {
+                    loadUnits(this.value);
+                });
+
+            } catch (error) {
+                console.error("無法載入章節資料:", error);
+            }
+        }
+
+        // 🔹 根據選擇的章節載入對應的單元
+        async function loadUnits(chapterName) {
+            try {
+                const response = await fetch(`${API_BASE}/get-data`);
+                const data = await response.json();
+
+                const unitSelect = document.getElementById("questionUnit");
+                unitSelect.innerHTML = `<option value="">請先選擇章節</option>`;
+
+                const chapter = data.chapters.find(c => c.name === chapterName);
+                if (chapter) {
+                    chapter.units.forEach(unit => {
+                        const option = document.createElement("option");
+                        option.value = unit.name;
+                        option.textContent = unit.name;
+                        unitSelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error("無法載入單元資料:", error);
+            }
+        }
+
+        // 🔹 新增章節
+        document.getElementById("addChapterForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const chapterName = document.getElementById("chapterName").value;
+
+            const response = await fetch(`${API_BASE}/add-chapter`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: chapterName })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            loadChapters(); // 重新載入章節選單
+        });
+
+        // 🔹 新增單元
+        document.getElementById("addUnitForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const unitName = document.getElementById("unitName").value;
+            const chapterName = document.getElementById("chapterOfUnit").value;
+            const unitImage = document.getElementById("unitImage").value;
+
+            const response = await fetch(`${API_BASE}/add-unit`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chapterName, unitName, image: unitImage })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            loadChapters(); // 更新章節與單元選單
+        });
+
+        // 🔹 新增題目
+        document.getElementById("addQuestionForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const chapterName = document.getElementById("questionChapter").value;
+            const unitName = document.getElementById("questionUnit").value;
+            const question = document.getElementById("questionText").value;
+            const answer = document.getElementById("answerText").value;
+            const questionImage = document.getElementById("questionImage").value;
+
+            const response = await fetch(`${API_BASE}/add-question`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chapterName, unitName, question, answer, image: questionImage })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        });
+
+        // 頁面載入時載入章節
+        document.addEventListener("DOMContentLoaded", loadChapters);
+    </script>
+</body>
+</html>
